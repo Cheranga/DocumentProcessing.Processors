@@ -21,6 +21,11 @@ namespace DocumentProcessing.Processors.Services
             if (!string.IsNullOrWhiteSpace(message.RequestReferenceId))
             {
                 var content = await _blobService.GetBlobContentAsync(message.RequestReferenceId);
+                if (string.IsNullOrWhiteSpace(content))
+                {
+                    return false;
+                }
+
                 processDocumentRequest = JsonConvert.DeserializeObject<ProcessDocumentRequest>(content);
             }
             else

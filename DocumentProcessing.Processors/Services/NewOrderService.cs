@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using DocumentProcessing.Processors.DTO;
+using Microsoft.Azure.WebJobs.Host.Executors;
 using Newtonsoft.Json;
 
 namespace DocumentProcessing.Processors.Services
@@ -27,11 +28,9 @@ namespace DocumentProcessing.Processors.Services
                 processDocumentRequest = message.Request;
             }
             //
-            // TODO: Handle new orders
+            // TODO: Handle the new order
             //
-            var status = (new Random().Next(3)) % 2 == 0;
-            
-            return status;
+            return true;
         }
     }
 }

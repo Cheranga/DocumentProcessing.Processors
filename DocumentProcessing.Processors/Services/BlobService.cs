@@ -21,32 +21,6 @@ namespace DocumentProcessing.Processors.Services
             _logger = logger;
         }
 
-        public async Task<bool> UploadBlobAsync(string documentId, string data)
-        {
-            try
-            {
-                var documentBytes = Encoding.Default.GetBytes(data);
-
-                var blobEndpoint = $"https://{_storageConfiguration.Account}.blob.core.windows.net";
-
-                var blobClient = new BlobServiceClient(new Uri(blobEndpoint), new DefaultAzureCredential());
-
-                var blobContainerClient = blobClient.GetBlobContainerClient(_storageConfiguration.Container);
-
-                using (var memoryStream = new MemoryStream(documentBytes))
-                {
-                    await blobContainerClient.UploadBlobAsync(documentId, memoryStream);
-                    return true;
-                }
-            }
-            catch (Exception exception)
-            {
-                _logger.LogError(exception, "Error when uploading document.");
-            }
-
-            return false;
-        }
-
         public async Task<string> GetBlobContentAsync(string blobName)
         {
             try

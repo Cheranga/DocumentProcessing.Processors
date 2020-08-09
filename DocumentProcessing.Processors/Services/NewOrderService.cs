@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using DocumentProcessing.Processors.DTO;
 using Microsoft.Azure.WebJobs.Host.Executors;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
 namespace DocumentProcessing.Processors.Services
@@ -9,10 +10,12 @@ namespace DocumentProcessing.Processors.Services
     public class NewOrderService : INewOrderService
     {
         private readonly IBlobService _blobService;
+        private readonly ILogger<NewOrderService> _logger;
 
-        public NewOrderService(IBlobService blobService)
+        public NewOrderService(IBlobService blobService, ILogger<NewOrderService> logger)
         {
             _blobService = blobService;
+            _logger = logger;
         }
 
         public async Task<bool> HandleAsync(ProcessDocumentMessage message)
@@ -27,6 +30,7 @@ namespace DocumentProcessing.Processors.Services
                 }
 
                 processDocumentRequest = JsonConvert.DeserializeObject<ProcessDocumentRequest>(content);
+                
             }
             else
             {
@@ -35,6 +39,9 @@ namespace DocumentProcessing.Processors.Services
             //
             // TODO: Handle the new order
             //
+
+            _logger.LogInformation($"Request handled successfully: {JsonConvert.SerializeObject(processDocumentRequest)}");
+
             return true;
         }
     }
